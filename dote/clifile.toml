@@ -10,16 +10,19 @@ description = "List profiles"
 action = "listProfiles"
 
 [[command.flags]]
+type = "string"
 name = "username"
 aliases = [ "u" ]
 description = "Username"
 
 [[command.flags]]
+type = "string"
 name = "provider"
 aliases = [ "prov" ]
 description = "dotefile provider"
 
 [[command.flags]]
+type = "string"
 name = "repo"
 aliases = [ "r" ]
 description = "repository source of dotefiles"
