@@ -1,0 +1,25 @@
+[general]
+name = "dote"
+description = "Manage and consume dotefiles"
+generator = "github.com/urfave/cli"
+
+[[command]]
+name = "list-profiles"
+aliases = [ "ls" ]
+description = "List profiles"
+action = "listProfiles"
+
+[[command.flags]]
+name = "username"
+aliases = [ "u" ]
+description = "Username"
+
+[[command.flags]]
+name = "provider"
+aliases = [ "prov" ]
+description = "dotefile provider"
+
+[[command.flags]]
+name = "repo"
+aliases = [ "r" ]
+description = "repository source of dotefiles"
