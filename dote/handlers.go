@@ -61,3 +61,30 @@ func listProfiles(c *cli.Context) error {
 
 	return nil
 }
+
+func getProfile(c *cli.Context) error {
+	source := c.String("source")
+	if len(source) == 0 {
+		fmt.Println("must provider source")
+		os.Exit(1)
+	}
+
+	profile := c.String("profile")
+	if len(profile) == 0 {
+		fmt.Println("must provide profile")
+		os.Exit(1)
+	}
+
+	// Retrieve profile.
+	client := NewGitHubProvider(nil)
+	prof, err := client.GetProfile(
+		source,
+		profile,
+	)
+	if err != nil {
+		fmt.Println("error retrieving profile: ", err)
+		os.Exit(1)
+	}
+	fmt.Println(prof)
+	return nil
+}

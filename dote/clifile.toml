@@ -26,3 +26,22 @@ type = "string"
 name = "repo"
 aliases = [ "r" ]
 description = "repository source of dotefiles"
+
+
+[[command]]
+name = "get-profile"
+aliases = [ "get" ]
+description = "Get profile"
+action = "getProfile"
+
+[[command.flags]]
+type = "string"
+name = "source"
+aliases = [ "s" ]
+description = "profile source"
+
+[[command.flags]]
+type = "string"
+name = "profile"
+aliases = [ "prof" ]
+description = "profile name"

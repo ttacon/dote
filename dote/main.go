@@ -18,8 +18,8 @@ func main() {
 
 	app.Commands = []*cli.Command{
 		&cli.Command{
-			Name:        "list-profiles",
 			Action:      listProfiles,
+			Name:        "list-profiles",
 			Description: "List profiles",
 			Aliases:     []string{"ls"},
 			Flags: []cli.Flag{
@@ -34,6 +34,22 @@ func main() {
 				&cli.StringFlag{
 					Name:    "repo",
 					Aliases: []string{"r"},
+				},
+			},
+		},
+		&cli.Command{
+			Action:      getProfile,
+			Name:        "get-profile",
+			Description: "Get profile",
+			Aliases:     []string{"get"},
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:    "source",
+					Aliases: []string{"s"},
+				},
+				&cli.StringFlag{
+					Name:    "profile",
+					Aliases: []string{"prof"},
 				},
 			},
 		},
