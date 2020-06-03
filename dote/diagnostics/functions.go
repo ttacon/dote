@@ -1,18 +1,14 @@
 package diagnostics
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path/filepath"
-	"syscall"
 
 	sysinfo "github.com/elastic/go-sysinfo"
+	"github.com/ttacon/dote/dote/storage"
 	cli "github.com/urfave/cli/v2"
 )
 
-type DiagnosticFunc func(c *cli.Context) error
+type DiagnosticFunc func(c *cli.Context, _ storage.Storage) error
 
 var (
 	DiagnosticFunctions = []DiagnosticFunc{
@@ -21,7 +17,7 @@ var (
 	}
 )
 
-func GetMachineInformation(c *cli.Context) error {
+func GetMachineInformation(c *cli.Context, _ storage.Storage) error {
 	fmt.Println("\n\nMachine information:")
 	host, err := sysinfo.Host()
 	if err != nil {
@@ -46,70 +42,21 @@ Containerized: %v
 	return nil
 }
 
-func ListInstalledProfiles(c *cli.Context) error {
-	fmt.Println("\n\nInstalled profile:")
-
-	dotePath, err := getDotePath()
+func ListInstalledProfiles(c *cli.Context, strg storage.Storage) error {
+	installedProfiles, err := strg.ListInstalledProfiles()
 	if err != nil {
 		return err
 	}
 
-	data, err := ioutil.ReadFile(filepath.Join(
-		dotePath,
-		"profileIndex.json",
-	))
-	if err != nil {
-
-		// See if the error is due to the path not existing:
-		//
-		// - will be os.PathError
-		// - Error will be syscall.Errno(0x02)
-		pathErr, ok := err.(*os.PathError)
-		if !ok {
-			return err
-		}
-
-		// Check to see if the issue is that the `.config/dote`
-		// directory doesn't exist.
-		if syscallErno, ok := pathErr.Err.(syscall.Errno); !ok || syscallErno != 2 {
-			return err
-		}
-
-		// Make the directory
-		if err := os.MkdirAll(dotePath, os.ModeDir|0755); err != nil {
-			return err
-		}
-
-		emptyData := []byte("{}")
-		if err := ioutil.WriteFile(filepath.Join(
-			dotePath,
-			"profileIndex.json",
-		), emptyData, 0644); err != nil {
-			return err
-		}
-
-		// Set it to our newly, empty, index data.
-		data = emptyData
-	}
-
-	var installedProfiles = map[string]interface{}{}
-	if err := json.Unmarshal(data, &installedProfiles); err != nil {
-		return err
-	}
-
+	fmt.Println("\n\nInstalled profiles:")
 	if len(installedProfiles) == 0 {
 		fmt.Println("no profiles currently installed")
 		return nil
 	}
 
-	for profileName, _ := range installedProfiles {
-		fmt.Println(profileName)
+	for _, profileName := range installedProfiles {
+		fmt.Printf(" - %s\n", profileName)
 	}
 
 	return nil
-}
-
-func getDotePath() (string, error) {
-	home := os.Getenv("HOME")
-	return filepath.Join(home, ".config", "dote"), nil
 }

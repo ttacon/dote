@@ -19,8 +19,8 @@ func main() {
 	app.Commands = []*cli.Command{
 		&cli.Command{
 			Name:        "list-profiles",
-			Action:      listProfiles,
 			Description: "List profiles",
+			Action:      listProfiles,
 			Aliases:     []string{"ls"},
 			Flags: []cli.Flag{
 				&cli.StringFlag{
@@ -38,8 +38,8 @@ func main() {
 			},
 		},
 		&cli.Command{
-			Name:        "get-profile",
 			Action:      getProfile,
+			Name:        "get-profile",
 			Description: "Get profile",
 			Aliases:     []string{"get"},
 			Flags: []cli.Flag{
@@ -58,8 +58,8 @@ func main() {
 			},
 		},
 		&cli.Command{
-			Name:        "diagnostics",
 			Action:      runDiagnostics,
+			Name:        "diagnostics",
 			Description: "Run diagnostics",
 			Aliases:     []string{"diag"},
 		},

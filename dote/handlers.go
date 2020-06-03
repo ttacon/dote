@@ -6,6 +6,8 @@ import (
 
 	"github.com/ttacon/dote/dote/diagnostics"
 	"github.com/ttacon/dote/dote/providers"
+	"github.com/ttacon/dote/dote/storage"
+	"github.com/ttacon/dote/dote/types"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -87,13 +89,24 @@ func getProfile(c *cli.Context) error {
 		fmt.Println("error retrieving profile: ", err)
 		os.Exit(1)
 	}
-	fmt.Println(prof)
-	return nil
+
+	if c.Bool("dry-run") {
+		fmt.Println(prof)
+		return nil
+	}
+
+	return saveProfile(source, profile, prof)
+}
+
+func saveProfile(source, profileName string, profile *types.Profile) error {
+	strg := storage.NewFSStorage()
+	return strg.SaveProfile(source, profileName, profile)
 }
 
 func runDiagnostics(c *cli.Context) error {
+	strg := storage.NewFSStorage()
 	for _, fn := range diagnostics.DiagnosticFunctions {
-		if err := fn(c); err != nil {
+		if err := fn(c, strg); err != nil {
 			fmt.Println("err: ", err)
 			return err
 		}
