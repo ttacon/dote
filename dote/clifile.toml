@@ -62,3 +62,27 @@ name = "diagnostics"
 aliases = [ "diag" ]
 description = "Run diagnostics"
 action = "runDiagnostics"
+
+##########
+#
+# install-profile command
+#
+##########
+
+[[command]]
+name = "install-profile"
+aliases = [ "install", "i" ]
+description = "Install profile"
+action = "installProfile"
+
+[[command.flags]]
+type = "string"
+name = "source"
+aliases = [ "s" ]
+description = "profile source"
+
+[[command.flags]]
+type = "string"
+name = "profile"
+aliases = [ "prof" ]
+description = "profile name"

@@ -12,6 +12,7 @@ import (
 
 type Storage interface {
 	ListInstalledProfiles() ([]string, error)
+	GetProfile(source, profileName string) (*types.Profile, error)
 	SaveProfile(source, profileName string, profile *types.Profile) error
 }
 
@@ -182,4 +183,33 @@ func ensureIndexFileExists(dotePath string) error {
 	}
 
 	return nil
+}
+
+func (_ fsStorage) GetProfile(source, profileName string) (*types.Profile, error) {
+	dotePath, err := getDotePath()
+	if err != nil {
+		return nil, err
+	}
+
+	compoundName := source + ":" + profileName
+
+	profilePath := filepath.Join(
+		dotePath,
+		"profiles",
+		compoundName,
+		"master",
+		"compiledPolicy.json",
+	)
+
+	profileRawData, err := ioutil.ReadFile(profilePath)
+	if err != nil {
+		return nil, err
+	}
+
+	var profile types.Profile
+	if err := json.Unmarshal(profileRawData, &profile); err != nil {
+		return nil, err
+	}
+
+	return &profile, nil
 }

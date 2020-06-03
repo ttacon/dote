@@ -38,9 +38,9 @@ func main() {
 			},
 		},
 		&cli.Command{
-			Action:      getProfile,
 			Name:        "get-profile",
 			Description: "Get profile",
+			Action:      getProfile,
 			Aliases:     []string{"get"},
 			Flags: []cli.Flag{
 				&cli.StringFlag{
@@ -58,10 +58,26 @@ func main() {
 			},
 		},
 		&cli.Command{
-			Action:      runDiagnostics,
 			Name:        "diagnostics",
+			Action:      runDiagnostics,
 			Description: "Run diagnostics",
 			Aliases:     []string{"diag"},
+		},
+		&cli.Command{
+			Name:        "install-profile",
+			Action:      installProfile,
+			Description: "Install profile",
+			Aliases:     []string{"install\", \"i"},
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:    "source",
+					Aliases: []string{"s"},
+				},
+				&cli.StringFlag{
+					Name:    "profile",
+					Aliases: []string{"prof"},
+				},
+			},
 		},
 	}
 	if err := app.Run(os.Args); err != nil {

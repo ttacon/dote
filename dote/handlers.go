@@ -1,10 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
 	"github.com/ttacon/dote/dote/diagnostics"
+	"github.com/ttacon/dote/dote/installers"
 	"github.com/ttacon/dote/dote/providers"
 	"github.com/ttacon/dote/dote/storage"
 	"github.com/ttacon/dote/dote/types"
@@ -113,4 +115,27 @@ func runDiagnostics(c *cli.Context) error {
 	}
 
 	return nil
+}
+
+func installProfile(c *cli.Context) error {
+	source := c.String("source")
+	if len(source) == 0 {
+		fmt.Println("must provider source")
+		return errors.New("must provider source")
+	}
+
+	profileName := c.String("profile")
+	if len(profileName) == 0 {
+		fmt.Println("must provide profile")
+		return errors.New("must provide profile")
+	}
+
+	strg := storage.NewFSStorage()
+	profile, err := strg.GetProfile(source, profileName)
+	if err != nil {
+		fmt.Println("err: ", err)
+		return err
+	}
+
+	return installers.Install(profile)
 }
