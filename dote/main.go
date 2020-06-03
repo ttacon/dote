@@ -18,8 +18,8 @@ func main() {
 
 	app.Commands = []*cli.Command{
 		&cli.Command{
-			Action:      listProfiles,
 			Name:        "list-profiles",
+			Action:      listProfiles,
 			Description: "List profiles",
 			Aliases:     []string{"ls"},
 			Flags: []cli.Flag{
@@ -38,8 +38,8 @@ func main() {
 			},
 		},
 		&cli.Command{
-			Action:      getProfile,
 			Name:        "get-profile",
+			Action:      getProfile,
 			Description: "Get profile",
 			Aliases:     []string{"get"},
 			Flags: []cli.Flag{
@@ -51,7 +51,17 @@ func main() {
 					Name:    "profile",
 					Aliases: []string{"prof"},
 				},
+				&cli.BoolFlag{
+					Name:    "dry-run",
+					Aliases: []string{"dry"},
+				},
 			},
+		},
+		&cli.Command{
+			Name:        "diagnostics",
+			Action:      runDiagnostics,
+			Description: "Run diagnostics",
+			Aliases:     []string{"diag"},
 		},
 	}
 	if err := app.Run(os.Args); err != nil {

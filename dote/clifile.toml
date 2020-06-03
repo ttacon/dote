@@ -27,6 +27,11 @@ name = "repo"
 aliases = [ "r" ]
 description = "repository source of dotefiles"
 
+##########
+#
+# get-profile command
+#
+##########
 
 [[command]]
 name = "get-profile"
@@ -45,3 +50,15 @@ type = "string"
 name = "profile"
 aliases = [ "prof" ]
 description = "profile name"
+
+[[command.flags]]
+type = "bool"
+name = "dry-run"
+aliases = ["dry"]
+description = "Dry run of retrieving profile"
+
+[[command]]
+name = "diagnostics"
+aliases = [ "diag" ]
+description = "Run diagnostics"
+action = "runDiagnostics"

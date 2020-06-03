@@ -10,3 +10,6 @@ build: main-file
 
 testex: build
 	./dote get --source github.com/ttacon/dotefiles --profile=dev
+
+testdiag: build
+	./dote diag

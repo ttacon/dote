@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ttacon/dote/dote/diagnostics"
+	"github.com/ttacon/dote/dote/providers"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -31,7 +33,7 @@ func listProfiles(c *cli.Context) error {
 	}
 
 	// Retrieve repo.
-	client := NewGitHubProvider(nil)
+	client := providers.NewGitHubProvider(nil)
 	profiles, err := client.ListProfiles(
 		fmt.Sprintf(
 			"%s/%s/%s",
@@ -76,7 +78,7 @@ func getProfile(c *cli.Context) error {
 	}
 
 	// Retrieve profile.
-	client := NewGitHubProvider(nil)
+	client := providers.NewGitHubProvider(nil)
 	prof, err := client.GetProfile(
 		source,
 		profile,
@@ -86,5 +88,16 @@ func getProfile(c *cli.Context) error {
 		os.Exit(1)
 	}
 	fmt.Println(prof)
+	return nil
+}
+
+func runDiagnostics(c *cli.Context) error {
+	for _, fn := range diagnostics.DiagnosticFunctions {
+		if err := fn(c); err != nil {
+			fmt.Println("err: ", err)
+			return err
+		}
+	}
+
 	return nil
 }
